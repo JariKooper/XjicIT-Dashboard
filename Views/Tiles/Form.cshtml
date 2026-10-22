@@ -1,0 +1,80 @@
+@model TileFormViewModel
+@{
+    ViewData["Title"] = Model.IsEdit ? "Edit tile" : "Add tile";
+    var isFile = Model.Type == TileType.File;
+}
+<nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a asp-controller="Admin" asp-action="Index">Admin</a></li><li class="breadcrumb-item"><a asp-action="Index">Tiles</a></li><li class="breadcrumb-item active">@ViewData["Title"]</li></ol></nav>
+
+<div class="card app-card" style="max-width: 720px;">
+    <div class="card-body p-4">
+        <h1 class="h4 mb-4">@ViewData["Title"]</h1>
+        <form asp-action="@(Model.IsEdit ? "Edit" : "Create")" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+
+            <div class="mb-3">
+                <label class="form-label d-block">Tile type</label>
+                <div class="btn-group" role="group">
+                    <input type="radio" class="btn-check" name="Type" id="typeUrl" value="Url" checked="@(!isFile)" />
+                    <label class="btn btn-outline-primary" for="typeUrl"><i class="bi bi-link-45deg"></i> URL</label>
+                    <input type="radio" class="btn-check" name="Type" id="typeFile" value="File" checked="@isFile" />
+                    <label class="btn btn-outline-primary" for="typeFile"><i class="bi bi-file-earmark"></i> File</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">Description <span class="text-muted small">(optional)</span></label>
+                <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Description" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Icon" class="form-label">Icon <span class="text-muted small">(optional)</span></label>
+                <input asp-for="Icon" class="form-control" placeholder="e.g. bi-file-earmark-pdf, bi-globe, bi-book" />
+                <div class="form-text">A <a href="https://icons.getbootstrap.com/" target="_blank" rel="noopener noreferrer">Bootstrap Icons</a> class name.</div>
+                <span asp-validation-for="Icon" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3 type-section" data-type="Url">
+                <label asp-for="Url" class="form-label"></label>
+                <input asp-for="Url" class="form-control" type="url" placeholder="https://example.com" />
+                <span asp-validation-for="Url" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3 type-section" data-type="File">
+                <label asp-for="Upload" class="form-label"></label>
+                <input asp-for="Upload" class="form-control" type="file" />
+                @if (!string.IsNullOrEmpty(Model.CurrentFileName))
+                {
+                    <div class="form-text">Current file: <strong>@Model.CurrentFileName</strong>. Leave empty to keep it.</div>
+                }
+                <div class="form-text">Maximum size: 50 MB.</div>
+                <span asp-validation-for="Upload" class="text-danger small"></span>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Save</button>
+                <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const sections = document.querySelectorAll('.type-section');
+            function update() {
+                const selected = document.querySelector('input[name="Type"]:checked').value;
+                sections.forEach(s => s.classList.toggle('d-none', s.dataset.type !== selected));
+            }
+            document.querySelectorAll('input[name="Type"]').forEach(r => r.addEventListener('change', update));
+            update();
+        })();
+    </script>
+}

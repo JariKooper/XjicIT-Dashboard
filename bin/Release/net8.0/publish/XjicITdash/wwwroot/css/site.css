@@ -1,0 +1,171 @@
+/* XjicIT Dashboard - light blue theme. All colors are defined here as CSS variables. */
+:root {
+    --app-primary: #2b7bb9;
+    --app-primary-dark: #1f5f91;
+    --app-primary-light: #d6e9f8;
+    --app-accent: #5aa9e6;
+    --app-bg: #eef6fc;
+    --app-surface: #ffffff;
+    --app-border: #bcdaf2;
+    --app-text: #1d3447;
+    --app-muted: #5f7a90;
+    --app-shadow: 0 2px 6px rgba(43, 123, 185, 0.08), 0 1px 2px rgba(43, 123, 185, 0.06);
+    --app-shadow-hover: 0 8px 20px rgba(43, 123, 185, 0.18);
+    --app-radius: 0.75rem;
+
+    /* Bootstrap overrides */
+    --bs-primary: var(--app-primary);
+    --bs-primary-rgb: 43, 123, 185;
+    --bs-link-color: var(--app-primary);
+    --bs-link-color-rgb: 43, 123, 185;
+    --bs-link-hover-color: var(--app-primary-dark);
+    --bs-link-hover-color-rgb: 31, 95, 145;
+    --bs-body-color: var(--app-text);
+    --bs-body-bg: var(--app-bg);
+    --bs-border-color: var(--app-border);
+}
+
+html, body { height: 100%; }
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--app-bg);
+    color: var(--app-text);
+}
+
+main { flex: 1 0 auto; }
+
+/* Navigation */
+.app-navbar { background: linear-gradient(90deg, var(--app-primary-dark), var(--app-primary)); }
+.app-navbar .nav-link { color: rgba(255, 255, 255, 0.85); }
+.app-navbar .nav-link:hover,
+.app-navbar .nav-link.active { color: #fff; }
+
+.app-footer {
+    color: var(--app-muted);
+    border-top: 1px solid var(--app-border);
+    background: var(--app-surface);
+}
+
+/* Buttons */
+.btn-primary {
+    --bs-btn-bg: var(--app-primary);
+    --bs-btn-border-color: var(--app-primary);
+    --bs-btn-hover-bg: var(--app-primary-dark);
+    --bs-btn-hover-border-color: var(--app-primary-dark);
+    --bs-btn-active-bg: var(--app-primary-dark);
+    --bs-btn-active-border-color: var(--app-primary-dark);
+    --bs-btn-disabled-bg: var(--app-accent);
+    --bs-btn-disabled-border-color: var(--app-accent);
+}
+.btn-outline-primary {
+    --bs-btn-color: var(--app-primary);
+    --bs-btn-border-color: var(--app-primary);
+    --bs-btn-hover-bg: var(--app-primary);
+    --bs-btn-hover-border-color: var(--app-primary);
+    --bs-btn-active-bg: var(--app-primary-dark);
+    --bs-btn-active-border-color: var(--app-primary-dark);
+    --bs-btn-disabled-color: var(--app-accent);
+    --bs-btn-disabled-border-color: var(--app-border);
+}
+.btn-check:checked + .btn-outline-primary {
+    background-color: var(--app-primary);
+    border-color: var(--app-primary);
+}
+.text-primary { color: var(--app-primary) !important; }
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--app-accent);
+    box-shadow: 0 0 0 0.2rem rgba(43, 123, 185, 0.2);
+}
+
+/* Cards and tables */
+.app-card {
+    background: var(--app-surface);
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius);
+    box-shadow: var(--app-shadow);
+    overflow: hidden;
+}
+.app-card .table thead th {
+    background: var(--app-primary-light);
+    color: var(--app-primary-dark);
+    font-weight: 600;
+    border-bottom-color: var(--app-border);
+}
+.badge-file { background: var(--app-primary); color: #fff; }
+.badge-url { background: var(--app-primary-light); color: var(--app-primary-dark); }
+
+.breadcrumb { font-size: 0.9rem; }
+
+.login-card { border-top: 4px solid var(--app-primary); }
+
+/* Dashboard tiles */
+.tile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem;
+}
+
+.dash-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-height: 170px;
+    padding: 1.25rem;
+    background: var(--app-surface);
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius);
+    box-shadow: var(--app-shadow);
+    color: var(--app-text);
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.dash-tile:hover,
+.dash-tile:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: var(--app-shadow-hover);
+    border-color: var(--app-accent);
+    color: var(--app-text);
+}
+.dash-tile:focus-visible { outline: 3px solid var(--app-accent); outline-offset: 2px; }
+
+.dash-tile-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.5rem;
+    border-radius: 0.6rem;
+    background: var(--app-primary-light);
+    color: var(--app-primary);
+}
+
+.dash-tile-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem;
+    color: var(--app-primary-dark);
+}
+
+.dash-tile-desc {
+    font-size: 0.9rem;
+    color: var(--app-muted);
+    margin: 0 0 0.5rem;
+}
+
+.dash-tile-meta {
+    font-size: 0.8rem;
+    color: var(--app-muted);
+    word-break: break-all;
+    margin-top: auto;
+}
+.dash-tile-body { display: flex; flex-direction: column; flex: 1; }
+
+@media (max-width: 575.98px) {
+    .tile-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .dash-tile { min-height: 0; flex-direction: row; align-items: flex-start; }
+}

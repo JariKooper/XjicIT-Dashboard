@@ -1,0 +1,18 @@
+@model Tile
+@{
+    ViewData["Title"] = "Delete tile";
+}
+<div class="card app-card border-danger-subtle" style="max-width: 560px;">
+    <div class="card-body p-4">
+        <h1 class="h4 text-danger"><i class="bi bi-trash"></i> Delete tile</h1>
+        <p>Are you sure you want to delete the tile <strong>@Model.Title</strong>?</p>
+        @if (Model.Type == TileType.File)
+        {
+            <p class="small text-muted">The uploaded file <strong>@Model.OriginalFileName</strong> will also be removed from disk.</p>
+        }
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-flex gap-2">
+            <button type="submit" class="btn btn-danger">Yes, delete</button>
+            <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+        </form>
+    </div>
+</div>
