@@ -1,0 +1,22 @@
+@{
+    ViewData["Title"] = "Admin";
+}
+<h1 class="h3 mb-4">Management</h1>
+<div class="tile-grid">
+    <a class="dash-tile" asp-controller="Tiles" asp-action="Index">
+        <div class="dash-tile-icon"><i class="bi bi-grid-1x2"></i></div>
+        <div class="dash-tile-body">
+            <h2 class="dash-tile-title">Tiles</h2>
+            <p class="dash-tile-desc">Add, edit, delete and reorder dashboard tiles.</p>
+            <div class="dash-tile-meta">@ViewBag.TileCount tile(s)</div>
+        </div>
+    </a>
+    <a class="dash-tile" asp-controller="Users" asp-action="Index">
+        <div class="dash-tile-icon"><i class="bi bi-people"></i></div>
+        <div class="dash-tile-body">
+            <h2 class="dash-tile-title">Users</h2>
+            <p class="dash-tile-desc">Create accounts, reset passwords and assign roles.</p>
+            <div class="dash-tile-meta">@ViewBag.UserCount user(s), @ViewBag.AdminCount admin(s)</div>
+        </div>
+    </a>
+</div>

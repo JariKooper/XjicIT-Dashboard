@@ -1,0 +1,23 @@
+@model AppUser
+@{
+    ViewData["Title"] = "Delete user";
+    var error = ViewBag.Error as string;
+}
+<div class="card app-card" style="max-width: 560px;">
+    <div class="card-body p-4">
+        <h1 class="h4 text-danger"><i class="bi bi-person-x"></i> Delete user</h1>
+        @if (error != null)
+        {
+            <div class="alert alert-warning">@error</div>
+            <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+        }
+        else
+        {
+            <p>Are you sure you want to delete the user <strong>@Model.UserName</strong> (@Model.Role)?</p>
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">Yes, delete</button>
+                <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+            </form>
+        }
+    </div>
+</div>
