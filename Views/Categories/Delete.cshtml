@@ -1,0 +1,22 @@
+@model Category
+@{
+    ViewData["Title"] = "Delete category";
+}
+<div class="card app-card border-danger-subtle" style="max-width: 560px;">
+    <div class="card-body p-4">
+        <h1 class="h4 text-danger"><i class="bi bi-trash"></i> Delete category</h1>
+        @if (Model.Tiles.Count > 0)
+        {
+            <p>The category <strong>@Model.Name</strong> still contains @Model.Tiles.Count tile(s) and cannot be deleted. Move or delete its tiles first.</p>
+            <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+        }
+        else
+        {
+            <p>Are you sure you want to delete the category <strong>@Model.Name</strong>?</p>
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">Yes, delete</button>
+                <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+            </form>
+        }
+    </div>
+</div>

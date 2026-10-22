@@ -11,6 +11,14 @@
             <div class="dash-tile-meta">@ViewBag.TileCount tile(s)</div>
         </div>
     </a>
+    <a class="dash-tile" asp-controller="Categories" asp-action="Index">
+        <div class="dash-tile-icon"><i class="bi bi-folder"></i></div>
+        <div class="dash-tile-body">
+            <h2 class="dash-tile-title">Categories</h2>
+            <p class="dash-tile-desc">Group tiles and choose who can see them.</p>
+            <div class="dash-tile-meta">@ViewBag.CategoryCount category(ies)</div>
+        </div>
+    </a>
     <a class="dash-tile" asp-controller="Users" asp-action="Index">
         <div class="dash-tile-icon"><i class="bi bi-people"></i></div>
         <div class="dash-tile-body">

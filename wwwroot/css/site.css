@@ -144,6 +144,12 @@ main { flex: 1 0 auto; }
     color: var(--app-primary);
 }
 
+.dash-tile-img {
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+}
+
 .dash-tile-title {
     font-size: 1.1rem;
     font-weight: 600;

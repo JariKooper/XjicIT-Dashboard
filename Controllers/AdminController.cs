@@ -12,6 +12,7 @@ public class AdminController(AppDbContext db) : Controller
     public async Task<IActionResult> Index()
     {
         ViewBag.TileCount = await db.Tiles.CountAsync();
+        ViewBag.CategoryCount = await db.Categories.CountAsync();
         ViewBag.UserCount = await db.Users.CountAsync();
         ViewBag.AdminCount = await db.Users.CountAsync(u => u.Role == Roles.Admin);
         return View();
