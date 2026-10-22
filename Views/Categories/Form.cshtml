@@ -1,0 +1,70 @@
+@model CategoryFormViewModel
+@{
+    ViewData["Title"] = Model.IsEdit ? "Edit category" : "Add category";
+}
+<nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a asp-controller="Admin" asp-action="Index">Admin</a></li><li class="breadcrumb-item"><a asp-action="Index">Categories</a></li><li class="breadcrumb-item active">@ViewData["Title"]</li></ol></nav>
+
+<div class="card app-card" style="max-width: 720px;">
+    <div class="card-body p-4">
+        <h1 class="h4 mb-4">@ViewData["Title"]</h1>
+        <form asp-action="@(Model.IsEdit ? "Edit" : "Create")" asp-route-id="@Model.Id" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SortOrder" class="form-label"></label>
+                <input asp-for="SortOrder" class="form-control" style="max-width: 160px;" />
+                <span asp-validation-for="SortOrder" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label d-block">Access</label>
+                <div class="btn-group" role="group">
+                    <input type="radio" class="btn-check" name="IsPublic" id="accessPublic" value="true" checked="@Model.IsPublic" />
+                    <label class="btn btn-outline-primary" for="accessPublic"><i class="bi bi-globe"></i> Public (everyone)</label>
+                    <input type="radio" class="btn-check" name="IsPublic" id="accessPrivate" value="false" checked="@(!Model.IsPublic)" />
+                    <label class="btn btn-outline-primary" for="accessPrivate"><i class="bi bi-lock"></i> Private (selected users)</label>
+                </div>
+            </div>
+
+            <div class="mb-3" id="userSection">
+                <label class="form-label d-block">Users with access</label>
+                @if (Model.Users.Count == 0)
+                {
+                    <div class="text-muted small">No users found.</div>
+                }
+                @foreach (var user in Model.Users)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="SelectedUserIds" id="user-@user.Id" value="@user.Id" checked="@Model.SelectedUserIds.Contains(user.Id)" />
+                        <label class="form-check-label" for="user-@user.Id">@user.UserName</label>
+                    </div>
+                }
+                <div class="form-text">Admins can always see every category.</div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Save</button>
+                <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const section = document.getElementById('userSection');
+            function update() {
+                section.classList.toggle('d-none', document.querySelector('input[name="IsPublic"]:checked').value === 'true');
+            }
+            document.querySelectorAll('input[name="IsPublic"]').forEach(r => r.addEventListener('change', update));
+            update();
+        })();
+    </script>
+}

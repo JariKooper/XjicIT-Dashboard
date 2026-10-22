@@ -66,6 +66,51 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     await DbSeeder.SeedAsync(scope.ServiceProvider);
+    await UpgradeSchemaAsync(scope.ServiceProvider.GetRequiredService<AppDbContext>());
+}
+
+// EnsureCreated does not alter an existing database, so add newer tables/columns idempotently.
+static async Task UpgradeSchemaAsync(AppDbContext db)
+{
+    await db.Database.ExecuteSqlRawAsync("""
+        CREATE TABLE IF NOT EXISTS "Categories" (
+            "Id" INTEGER NOT NULL CONSTRAINT "PK_Categories" PRIMARY KEY AUTOINCREMENT,
+            "Name" TEXT NOT NULL,
+            "SortOrder" INTEGER NOT NULL,
+            "IsPublic" INTEGER NOT NULL,
+            "CreatedUtc" TEXT NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS "CategoryUsers" (
+            "CategoryId" INTEGER NOT NULL,
+            "UserId" INTEGER NOT NULL,
+            CONSTRAINT "PK_CategoryUsers" PRIMARY KEY ("CategoryId", "UserId"),
+            CONSTRAINT "FK_CategoryUsers_Categories_CategoryId" FOREIGN KEY ("CategoryId") REFERENCES "Categories" ("Id") ON DELETE CASCADE,
+            CONSTRAINT "FK_CategoryUsers_Users_UserId" FOREIGN KEY ("UserId") REFERENCES "Users" ("Id") ON DELETE CASCADE
+        );
+        CREATE INDEX IF NOT EXISTS "IX_CategoryUsers_UserId" ON "CategoryUsers" ("UserId");
+        """);
+
+    async Task AddColumnAsync(string column, string definition)
+    {
+        var exists = (await db.Database
+            .SqlQueryRaw<int>("SELECT COUNT(*) AS \"Value\" FROM pragma_table_info('Tiles') WHERE name = {0}", column)
+            .ToListAsync()).Single() > 0;
+        if (!exists)
+            await db.Database.ExecuteSqlRawAsync($"ALTER TABLE \"Tiles\" ADD COLUMN \"{column}\" {definition};");
+    }
+
+    await AddColumnAsync("IconStoredFileName", "TEXT NULL");
+    await AddColumnAsync("IconContentType", "TEXT NULL");
+    await AddColumnAsync("CategoryId", "INTEGER NOT NULL DEFAULT 0");
+    await db.Database.ExecuteSqlRawAsync("""
+        CREATE INDEX IF NOT EXISTS "IX_Tiles_CategoryId" ON "Tiles" ("CategoryId");
+        INSERT INTO "Categories" ("Name", "SortOrder", "IsPublic", "CreatedUtc")
+            SELECT 'General', 0, 1, strftime('%Y-%m-%d %H:%M:%S', 'now')
+            WHERE EXISTS (SELECT 1 FROM "Tiles" WHERE "CategoryId" NOT IN (SELECT "Id" FROM "Categories"))
+              AND NOT EXISTS (SELECT 1 FROM "Categories" WHERE "Name" = 'General');
+        UPDATE "Tiles" SET "CategoryId" = (SELECT MIN("Id") FROM "Categories" WHERE "Name" = 'General')
+            WHERE "CategoryId" NOT IN (SELECT "Id" FROM "Categories");
+        """);
 }
 
 if (!app.Environment.IsDevelopment())

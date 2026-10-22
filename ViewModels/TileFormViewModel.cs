@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using XjicIT.Dashboard.Models;
 
 namespace XjicIT.Dashboard.ViewModels;
@@ -13,9 +14,19 @@ public class TileFormViewModel
     [StringLength(500)]
     public string? Description { get; set; }
 
-    [StringLength(64)]
-    [RegularExpression(@"^bi-[a-z0-9-]+$", ErrorMessage = "Use a Bootstrap Icons class such as bi-file-earmark or bi-globe.")]
-    public string? Icon { get; set; }
+    [Required(ErrorMessage = "Please choose a category."), Display(Name = "Category")]
+    public int? CategoryId { get; set; }
+
+    [Display(Name = "Icon image")]
+    public IFormFile? IconUpload { get; set; }
+
+    [Display(Name = "Remove icon")]
+    public bool RemoveIcon { get; set; }
+
+    /// <summary>Whether the tile currently has an icon image (edit mode only).</summary>
+    public bool HasIcon { get; set; }
+
+    public List<SelectListItem> Categories { get; set; } = [];
 
     [Display(Name = "Tile type")]
     public TileType Type { get; set; } = TileType.Url;

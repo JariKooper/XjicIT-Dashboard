@@ -18,9 +18,16 @@ public class Tile
     [MaxLength(500)]
     public string? Description { get; set; }
 
-    /// <summary>Optional Bootstrap Icons class, e.g. "bi-file-earmark-pdf".</summary>
-    [MaxLength(64)]
-    public string? Icon { get; set; }
+    /// <summary>Generated file name of the optional icon image (inside the uploads folder).</summary>
+    [MaxLength(100)]
+    public string? IconStoredFileName { get; set; }
+
+    [MaxLength(100)]
+    public string? IconContentType { get; set; }
+
+    public int CategoryId { get; set; }
+
+    public Category Category { get; set; } = null!;
 
     public TileType Type { get; set; }
 

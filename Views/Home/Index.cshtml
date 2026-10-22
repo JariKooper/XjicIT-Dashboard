@@ -1,4 +1,4 @@
-@model List<Tile>
+@model List<Category>
 @{
     ViewData["Title"] = "Dashboard";
 }
@@ -21,14 +21,26 @@
 }
 else
 {
+    @foreach (var category in Model)
+    {
+    <h2 class="h5 mb-3 mt-4">@category.Name</h2>
     <div class="tile-grid">
-        @foreach (var tile in Model)
+        @foreach (var tile in category.Tiles)
         {
-            var icon = tile.Icon ?? (tile.Type == TileType.File ? "bi-file-earmark-arrow-down" : "bi-box-arrow-up-right");
+            var icon = tile.Type == TileType.File ? "bi-file-earmark-arrow-down" : "bi-box-arrow-up-right";
             <a class="dash-tile" asp-action="Open" asp-route-id="@tile.Id"
                target="@(tile.Type == TileType.Url ? "_blank" : "_self")"
                rel="@(tile.Type == TileType.Url ? "noopener noreferrer" : null)">
-                <div class="dash-tile-icon"><i class="bi @icon"></i></div>
+                <div class="dash-tile-icon">
+                    @if (tile.IconStoredFileName != null)
+                    {
+                        <img src="@Url.Action("Icon", "Home", new { id = tile.Id })" alt="" class="dash-tile-img" />
+                    }
+                    else
+                    {
+                        <i class="bi @icon"></i>
+                    }
+                </div>
                 <div class="dash-tile-body">
                     <h2 class="dash-tile-title">@tile.Title</h2>
                     @if (!string.IsNullOrWhiteSpace(tile.Description))
@@ -49,4 +61,5 @@ else
             </a>
         }
     </div>
+    }
 }

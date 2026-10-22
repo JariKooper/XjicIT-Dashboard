@@ -15,6 +15,7 @@
                 <tr>
                     <th style="width: 110px;">Order</th>
                     <th>Title</th>
+                    <th>Category</th>
                     <th>Type</th>
                     <th>Target</th>
                     <th class="text-end">Actions</th>
@@ -23,7 +24,7 @@
             <tbody>
                 @if (Model.Count == 0)
                 {
-                    <tr><td colspan="5" class="text-center text-muted py-4">No tiles yet.</td></tr>
+                    <tr><td colspan="6" class="text-center text-muted py-4">No tiles yet.</td></tr>
                 }
                 @for (var i = 0; i < Model.Count; i++)
                 {
@@ -42,10 +43,10 @@
                             </div>
                         </td>
                         <td>
-                            @if (!string.IsNullOrEmpty(tile.Icon)) { <i class="bi @tile.Icon text-primary me-1"></i> }
                             <strong>@tile.Title</strong>
                             @if (!string.IsNullOrWhiteSpace(tile.Description)) { <div class="small text-muted">@tile.Description</div> }
                         </td>
+                        <td>@tile.Category.Name</td>
                         <td><span class="badge @(tile.Type == TileType.File ? "badge-file" : "badge-url")">@tile.Type</span></td>
                         <td class="text-break small">
                             @if (tile.Type == TileType.File)
